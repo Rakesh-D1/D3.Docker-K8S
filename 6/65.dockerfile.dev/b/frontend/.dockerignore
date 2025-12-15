@@ -7,4 +7,3 @@ build
 .gitignore
 Dockerfile.dev
 Dockerfile
-package.json
