@@ -1,0 +1,38 @@
+pipeline {  
+    agent any
+    
+    environment {
+        BUILD_FILE_NAME = 'laptop.txt'
+    }
+
+    stages {
+        stage('Build PC') {
+            steps {
+                cleanWs()
+                echo 'we are building a new PC'
+                echo "$BUILD_FILE_NAME"
+                sh '''
+                    mkdir -p build-pc
+                    touch build-pc/$BUILD_FILE_NAME
+                    echo "motherboard" >> build-pc/$BUILD_FILE_NAME
+                    cat build-pc/$BUILD_FILE_NAME
+                    echo "display" >> build-pc/$BUILD_FILE_NAME
+                    cat build-pc/$BUILD_FILE_NAME
+                    echo "keyboard" >> build-pc/$BUILD_FILE_NAME
+                    cat build-pc/$BUILD_FILE_NAME
+                '''
+            }
+        }
+        stage('Test Artifact') {
+            steps {
+                echo 'Testing artifacts'
+                sh 'test -f build-pc/$BUILD_FILE_NAME'
+            }
+        }
+    }
+    post {
+        success {
+            archiveArtifacts artifacts: 'build-pc/**'
+        }
+    }
+}
