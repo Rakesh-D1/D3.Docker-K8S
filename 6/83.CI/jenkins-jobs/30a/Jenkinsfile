@@ -1,0 +1,35 @@
+    pipeline {
+        agent any
+
+        stages {
+            stage('without-docker') {
+                steps {
+                    sh '''
+                        echo "without docker"
+                        ls -la
+                        touch no-container.txt
+                        echo $(date +%Y%m%d_%H%M%S) >> no-container.txt
+                                         
+                    '''
+                }
+            }
+
+            stage('with-docker') {
+                agent { 
+                    docker {
+                        image 'node:18-alpine'
+                        reuseNode true
+                    }
+                }
+                steps {
+                    sh '''
+                        echo "with docker"
+                        ls -la
+                        touch yes-container.txt
+                        echo $(date +%Y%m%d_%H%M%S) >> yes-container.txt
+                        npm --version                        
+                    '''
+                }
+            }
+        }
+    }
