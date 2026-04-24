@@ -1,3 +1,8 @@
+Purpose 
+1.Test CI of jenkins-controller
+2.test a sample hello stage
+3.
+
 pipeline {
     agent any
 
